@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Te amo niña 🌼</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: white;
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+/* =========================
+   MENSAJE CENTRAL
+========================= */
+
+.mensaje {
+    position: absolute;
+    z-index: 1000;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%) scale(0);
+
+    font-size: clamp(40px, 7vw, 100px);
+    font-weight: bold;
+
+    color: #f2b900;
+
+    text-align: center;
+    white-space: nowrap;
+
+    text-shadow:
+        0 3px 10px rgba(180, 130, 0, 0.25);
+
+    animation: aparecerMensaje 2s ease-out forwards;
+    animation-delay: 5s;
+}
+
+/* =========================
+   FLORES
+========================= */
+
+.flor {
+    position: absolute;
+
+    width: 80px;
+    height: 80px;
+
+    opacity: 0;
+
+    animation: aparecer 0.15s forwards;
+}
+
+/* Pétalos */
+
+.petalo {
+    fill: #FFD92F;
+    stroke: #E5A900;
+    stroke-width: 2;
+
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+
+    animation: dibujar 1.3s ease forwards;
+}
+
+/* Centro */
+
+.centro {
+    fill: #9A6500;
+    stroke: #704600;
+    stroke-width: 2;
+
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+
+    animation: dibujar 0.8s ease forwards;
+}
+
+/* Tallo */
+
+.tallo {
+    fill: none;
+    stroke: #4A9E42;
+    stroke-width: 3;
+
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+
+    animation: dibujar 1s ease forwards;
+}
+
+/* Hoja */
+
+.hoja {
+    fill: #62AD52;
+    stroke: #3E8636;
+    stroke-width: 2;
+
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+
+    animation: dibujar 1s ease forwards;
+}
+
+
+/* =========================
+   ANIMACIONES
+========================= */
+
+@keyframes dibujar {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes aparecer {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes aparecerMensaje {
+
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+
+    70% {
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- =========================
+     MENSAJE
+========================= -->
+
+<div class="mensaje">
+    Te amo, niña ❤️
+</div>
+
+
+<!-- Aquí se crearán las flores -->
+<div id="jardin"></div>
+
+
+<script>
+
+const jardin = document.getElementById("jardin");
+
+/*
+    Cantidad de flores.
+    Puedes subirlo a 150, 200, 300...
+*/
+const cantidadFlores = 420;
+
+
+/*
+    Crear una flor
+*/
+function crearFlor(numero) {
+
+    const flor = document.createElement("div");
+
+    flor.classList.add("flor");
+
+    /*
+        Posición aleatoria
+    */
+
+    let x = Math.random() * 100;
+    let y = Math.random() * 100;
+
+    /*
+        Evitar que las flores cubran
+        demasiado el mensaje central
+    */
+
+    const centroX = 50;
+    const centroY = 50;
+
+    const distancia = Math.sqrt(
+        Math.pow(x - centroX, 2) +
+        Math.pow(y - centroY, 2)
+    );
+
+    if (distancia < 18) {
+
+        if (x < 50)
+            x -= 20;
+        else
+            x += 20;
+
+        if (y < 50)
+            y -= 15;
+        else
+            y += 15;
+    }
+
+    flor.style.left = x + "%";
+    flor.style.top = y + "%";
+
+
+    /*
+        Tamaño aleatorio
+    */
+
+    const tamaño = 25 + Math.random() * 65;
+
+    flor.style.width = tamaño + "px";
+    flor.style.height = tamaño + "px";
+
+
+    /*
+        Cada flor aparece en un momento diferente
+    */
+
+    const retraso = 0.3 + numero * 0.055;
+
+    flor.style.animationDelay = retraso + "s";
+
+
+    /*
+        SVG de la flor
+    */
+
+    flor.innerHTML = `
+
+    <svg
+        viewBox="0 0 100 120"
+        width="100%"
+        height="100%"
+    >
+
+        <!-- TALLO -->
+
+        <path
+            class="tallo"
+            style="animation-delay:${retraso + 0.1}s"
+            d="M50 115 C47 90 52 70 50 55"
+        />
+
+
+        <!-- HOJA -->
+
+        <path
+            class="hoja"
+            style="animation-delay:${retraso + 0.3}s"
+            d="
+            M50 90
+            C30 78 15 88 12 102
+            C28 108 43 101 50 90
+            Z
+            "
+        />
+
+
+        <!-- PÉTALO ARRIBA -->
+
+        <ellipse
+            class="petalo"
+            style="animation-delay:${retraso + 0.4}s"
+            cx="50"
+            cy="35"
+            rx="12"
+            ry="25"
+        />
+
+
+        <!-- PÉTALO DERECHA -->
+
+        <ellipse
+            class="petalo"
+            style="animation-delay:${retraso + 0.55}s"
+            cx="50"
+            cy="35"
+            rx="12"
+            ry="25"
+            transform="rotate(60 50 35)"
+        />
+
+
+        <!-- PÉTALO IZQUIERDA -->
+
+        <ellipse
+            class="petalo"
+            style="animation-delay:${retraso + 0.7}s"
+            cx="50"
+            cy="35"
+            rx="12"
+            ry="25"
+            transform="rotate(-60 50 35)"
+        />
+
+
+        <!-- PÉTALO INFERIOR DERECHO -->
+
+        <ellipse
+            class="petalo"
+            style="animation-delay:${retraso + 0.85}s"
+            cx="50"
+            cy="35"
+            rx="12"
+            ry="25"
+            transform="rotate(120 50 35)"
+        />
+
+
+        <!-- PÉTALO INFERIOR IZQUIERDO -->
+
+        <ellipse
+            class="petalo"
+            style="animation-delay:${retraso + 1}s"
+            cx="50"
+            cy="35"
+            rx="12"
+            ry="25"
+            transform="rotate(-120 50 35)"
+        />
+
+
+        <!-- CENTRO -->
+
+        <circle
+            class="centro"
+            style="animation-delay:${retraso + 1.15}s"
+            cx="50"
+            cy="35"
+            r="9"
+        />
+
+    </svg>
+
+    `;
+
+    jardin.appendChild(flor);
+}
+
+
+/*
+    Crear todas las flores
+*/
+
+for (let i = 0; i < cantidadFlores; i++) {
+    crearFlor(i);
+}
+
+</script>
+
+</body>
+</html>
